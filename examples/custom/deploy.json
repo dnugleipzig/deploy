@@ -1,0 +1,8 @@
+{
+  "deployment": {
+    "application": "example-custom"
+  },
+  "application": {
+    "type": "custom"
+  }
+}

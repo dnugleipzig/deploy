@@ -1,0 +1,70 @@
+{
+  "deployment": {
+    "application": "example.com"
+  },
+  "requirements": [
+    "NETFramework451",
+    "UrlRewrite2"
+  ],
+  "dns": [
+    {
+      "type": "a",
+      "name": "example.com",
+      "value": "1.2.3.4"
+    }
+  ],
+  "certificates": {
+    "example.com.pfx": "env://CERT_PASSWORD"
+  },
+  "permissions": {
+    ".": {
+      "FullControl": [
+        "sid://BuiltinAdministratorsSid",
+        "sid://LocalSystemSid"
+      ]
+    },
+    "bin": {
+      "ReadAndExecute": [
+        "IUSR",
+        "IIS_IUSRs"
+      ]
+    },
+    "logs": {
+      "Modify": [
+        "IIS_IUSRs"
+      ]
+    }
+  },
+  "application": {
+    "type": "web",
+    "name": "example.com Web Site",
+    "physical_path": "bin",
+    "logs": "logs",
+    "app_pool": {
+      "name": "example.com Application Pool",
+      "_identity_comment": "One of these: SpecificUser|NetworkService|LocalService|LocalSystem",
+      "identity": "NetworkService",
+      "runtime": "v4.0"
+    },
+    "bindings": [
+      {
+        "protocol": "http",
+        "host_header": "example.com"
+      },
+      {
+        "protocol": "https",
+        "host_header": "example.com"
+      }
+    ],
+    "tests": [
+      {
+        "method": "GET",
+        "url": "http://example.com/",
+        "expect": {
+          "status": 200,
+          "url": "http://example.com/"
+        }
+      }
+    ]
+  }
+}
