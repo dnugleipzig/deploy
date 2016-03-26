@@ -1,10 +1,12 @@
 namespace :copy do
   desc 'Copy PowerShell library to application'
-  task :powershell do
+  task powershell: [:paket] do
     target = File.join(fetch(:rsync_stage), 'lib')
 
     rm_rf(target)
-    cp_r('lib/powershell/deployment/', target)
+    mkdir_p(target)
+
+    cp_r(%w(lib/powershell/Deployment lib/powershell/PowerYaml), target)
   end
 
   task :powershell do

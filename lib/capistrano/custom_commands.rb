@@ -4,7 +4,7 @@ cmd = %w(
   -NoLogo
   -NoProfile
   -NonInteractive
-  -ExecutionPolicy Unrestricted
+  -ExecutionPolicy Bypass
   -InputFormat None
   -Command
 )

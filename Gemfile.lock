@@ -9,6 +9,7 @@ GEM
       rake (>= 10.0.0)
       sshkit (~> 1.3)
     coderay (1.1.1)
+    configatron (4.5.0)
     ffi (1.9.10-x64-mingw32)
     formatador (0.2.5)
     guard (2.13.0)
@@ -28,6 +29,9 @@ GEM
     guard-rubocop (1.2.0)
       guard (~> 2.0)
       rubocop (~> 0.20)
+    guard-shell (0.7.1)
+      guard (>= 2.0.0)
+      guard-compat (~> 1.0)
     i18n (0.7.0)
     listen (3.0.6)
       rb-fsevent (>= 0.9.3)
@@ -37,7 +41,7 @@ GEM
     nenv (0.3.0)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
-    net-ssh (3.0.2)
+    net-ssh (3.1.0)
     notiffany (0.0.8)
       nenv (~> 0.1)
       shellany (~> 0.0)
@@ -52,7 +56,12 @@ GEM
       byebug (~> 8.0)
       pry (~> 0.10)
     rainbow (2.1.0)
-    rake (11.1.1)
+    rake (10.5.0)
+    rake-funnel (0.15.0.pre)
+      configatron (~> 4.5)
+      rake (~> 10.4)
+      rubyzip (~> 1.0)
+      smart_colored
     rb-fsevent (0.9.7)
     rb-inotify (0.9.7)
       ffi (>= 0.5.0)
@@ -62,10 +71,14 @@ GEM
       rainbow (>= 1.99.1, < 3.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (~> 1.0, >= 1.0.1)
+    rubocop-checkstyle_formatter (0.2.0)
+      rubocop (>= 0.20.1)
     ruby-progressbar (1.7.5)
     ruby_gntp (0.3.4)
+    rubyzip (1.2.0)
     shellany (0.0.1)
     slop (3.6.0)
+    smart_colored (1.1.1)
     sshkit (1.9.0)
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
@@ -81,7 +94,11 @@ DEPENDENCIES
   capistrano (~> 3.4)
   guard-bundler
   guard-rubocop
+  guard-shell
   pry-byebug
+  rake-funnel (~> 0.15pre)
+  rubocop (~> 0.37)
+  rubocop-checkstyle_formatter
   ruby_gntp
   wdm (>= 0.1.0)
 

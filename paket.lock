@@ -1,0 +1,12 @@
+NUGET
+  remote: https://www.powershellgallery.com/api/v2
+  specs:
+    Pester (3.4.0)
+    PSScriptAnalyzer (1.4.0)
+  remote: https://www.nuget.org/api/v2
+  specs:
+    YamlDotNet (3.8.0)
+GITHUB
+  remote: dfinke/PowerYaml
+  specs:
+    PowerYaml.psm1 (03e450cc1c8a5429658dda4d3d9d4fef0b9f7545)
