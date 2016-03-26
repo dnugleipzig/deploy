@@ -9,9 +9,9 @@ Describe 'Install-Web' {
     Mock Start-Website
     Mock Test-HttpResponse
 
-    Context 'web site to install' {
+    Context 'install' {
       $Config = @{
-        name = 'Web Site'
+        name = 'web site'
         physical_path = 'bin'
         properties = @{
           id = 42
@@ -99,14 +99,35 @@ Describe 'Install-Web' {
     }
 
     Context 'uninstall' {
+      Mock Stop-Website
+
       $Config = @{
-        something = $null
+        name = 'web site'
       }
 
       Install-Web -Config $Config -Uninstall
 
-      It 'does not uninstall web site' {
+      It 'stops web site' {
+        Assert-MockCalled Stop-Website -ParameterFilter {
+          $Name -eq $Config.name
+        }
+      }
+
+      It 'does not install web site' {
         Assert-MockCalled New-RecreatedWebAppPool -Exactly 0
+      }
+    }
+
+    Context 'web site does not exist on uninstall' {
+      Mock Out-Host
+      Mock Stop-Website { throw 'does not exist' }
+
+      $Config = @{
+        name = 'web site'
+      }
+
+      It 'fails' {
+        { Install-Web -Config $Config -Uninstall } | Should Throw
       }
     }
   }

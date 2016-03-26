@@ -10,6 +10,9 @@
 
   if ($Uninstall.IsPresent)
   {
+    "Stopping web site $($Config.name)" | Out-Host
+    Stop-Website -Name $Config.name
+
     Return
   }
 
