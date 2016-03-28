@@ -6,7 +6,7 @@ namespace :copy do
     rm_rf(target)
     mkdir_p(target)
 
-    cp_r(%w(lib/powershell/Deployment lib/powershell/PowerYaml), target)
+    cp_r(%w(lib/powershell/Deployment), target)
   end
 
   task :powershell do

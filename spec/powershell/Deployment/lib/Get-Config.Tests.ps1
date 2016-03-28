@@ -107,12 +107,11 @@ hash:
       $DeployYaml = 'TestDrive:\deploy.yaml'
 
       Set-Content -Path $DeployYaml -Value @"
-Nothing: *forward
-MyString: ForwardReference
+ref-not-found: *forward
 "@
 
       It 'fails' {
-        { Get-Config -File $DeployYaml } | Should Throw 'Exception calling "Load"'
+        { Get-Config -File $DeployYaml } | Should Throw "Anchor 'forward' not found"
       }
     }
   }

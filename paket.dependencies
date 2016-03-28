@@ -5,5 +5,3 @@ nuget Pester ~> 3.4
 nuget PSScriptAnalyzer ~> 1.4
 
 nuget YamlDotNet ~> 3.8
-
-github dfinke/PowerYaml PowerYaml.psm1

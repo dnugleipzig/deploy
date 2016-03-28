@@ -14,16 +14,8 @@
       Return
     }
 
-    if ($InputObject -is [string] -and
-        ($InputObject -eq '~' -or
-         $InputObject -eq 'null'))
-    {
-      Return $null
-    }
-
     if ($InputObject -is [ValueType] -or
-        $InputObject -is [string] -or
-        $InputObject -is [hashtable])
+        $InputObject -is [string])
     {
       if ($InputObject -is [string])
       {
@@ -41,12 +33,22 @@
       Return $InputObject
     }
 
-    if ($InputObject -is [System.Collections.IEnumerable])
+    if ($InputObject -is [System.Collections.IDictionary])
+    {
+      $Hash = @{}
+
+      $InputObject.GetEnumerator() | ForEach-Object {
+        $Hash[$_.Key] = ConvertTo-Hashtable -InputObject $_.Value
+      }
+
+      $Hash
+    }
+    elseif ($InputObject -is [System.Collections.IEnumerable])
     {
       $Collection = @(
         foreach ($Object in $InputObject)
         {
-          ConvertTo-Hashtable $Object
+          ConvertTo-Hashtable -InputObject $Object
         }
       )
 
@@ -58,7 +60,7 @@
 
       foreach ($Property in $InputObject.PSObject.Properties)
       {
-        $Hash[$Property.Name] = ConvertTo-Hashtable $Property.Value
+        $Hash[$Property.Name] = ConvertTo-Hashtable -InputObject $Property.Value
       }
 
       $Hash

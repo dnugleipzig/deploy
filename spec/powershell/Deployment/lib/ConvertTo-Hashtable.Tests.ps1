@@ -9,13 +9,6 @@ Describe 'ConvertTo-Hashtable' {
       }
     }
 
-    Context 'YAML null' {
-      It 'yields $null' {
-        ConvertTo-Hashtable '~' | Should Be $null
-        ConvertTo-Hashtable 'null' | Should Be $null
-      }
-    }
-
     Context 'integer' {
       It 'yields value' {
         $Value = ConvertTo-Hashtable 42
