@@ -99,6 +99,7 @@ Describe 'Install-Web' {
     }
 
     Context 'uninstall' {
+      Mock Out-Host
       Mock Stop-Website
 
       $Config = @{
