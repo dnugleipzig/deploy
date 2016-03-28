@@ -12,7 +12,7 @@ Describe 'Invoke-Deployment' {
   Mock -Module Deployment Out-Host
   Mock -Module Deployment Set-RootDirectory
 
-  It 'should load config from file' {
+  It 'loads config from file' {
     Mock -Module Deployment Get-Config {
       Return @{}
     }
@@ -22,7 +22,7 @@ Describe 'Invoke-Deployment' {
     Assert-MockCalled -Module Deployment Get-Config -ParameterFilter { $File -eq 'deploy.yaml' }
   }
 
-  It 'should set root directory' {
+  It 'sets root directory' {
     Invoke-Deployment -Root '.' -ConfigFile 'deploy.yaml'
 
     Assert-MockCalled -Module Deployment Set-RootDirectory -ParameterFilter { $Path -eq '.' }
@@ -338,7 +338,7 @@ deployment:
       properties:
         id: 42
         log_file:
-          directory: ../../logs2
+          directory: absolute-path://../../logs
           log_ext_file_flags: Date,Time
       app_pool:
         name: Example Application Pool
