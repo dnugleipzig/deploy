@@ -1,3 +1,5 @@
+require 'sshkit'
+
 cmd = %w(
   powershell.exe
   -Version 4.0

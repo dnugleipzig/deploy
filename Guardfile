@@ -5,6 +5,17 @@ guard :bundler do
 end
 
 group :specs, halt_on_fail: true do
+  guard :rspec,
+        all_on_start: true,
+        all_after_pass: true,
+        notification: true,
+        cmd: 'bundle exec rspec' do
+    watch('.rspec')              { 'spec' }
+    watch(%r{^spec/.+_spec\.rb$})
+    watch(%r{^lib/(.+)\.rb$})    { |m| "spec/#{m[1]}_spec.rb" }
+    watch('spec/spec_helper.rb') { 'spec' }
+  end
+
   guard :shell do
     def powershell
       %w(
@@ -65,9 +76,6 @@ group :specs, halt_on_fail: true do
     watch('.rubocop.yml') { |m| File.dirname(m[0]) }
     watch(File.basename(__FILE__))
     watch('Gemfile')
-    watch('Rules')
-    watch(%r{^lib/rules/})
-    watch(/\.ru$/)
     watch(/\.rb$/)
     watch(/\.rake$/)
   end
