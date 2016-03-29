@@ -1,3 +1,5 @@
+require 'rake/funnel'
+
 rsync_cache = lambda do
   cache = fetch(:rsync_cache)
   cache = File.join(deploy_to, cache) if cache && cache !~ %r{^/}
@@ -63,8 +65,28 @@ namespace :rsync do
   # Matches the naming scheme of git tasks.
   task create_release: [:release]
 
+  def version # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    version = fetch(:manifest)['application']['version']
+
+    if version.is_a?(Hash) && version['from']
+      file = File.join(fetch(:rsync_stage), version['from'])
+      begin
+        version = Rake::Funnel::Support::BinaryVersionReader.read_from(file).file_version
+      rescue => e
+        raise e, "Could not read version from #{file}"
+      end
+    end
+
+    unless version.is_a?(String) || version.is_a?(Fixnum)
+      warn('Manifest requires a version, but no version could be found. Using current time.')
+      return Time.now
+    end
+
+    version
+  end
+
   desc 'Determine the deployed revision'
   task :set_current_revision do
-    set :current_revision, Time.now
+    set :current_revision, version
   end
 end

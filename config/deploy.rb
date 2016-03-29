@@ -1,3 +1,5 @@
+require 'rake/funnel'
+
 STDOUT.sync = STDERR.sync = true
 
 # config valid only for current version of Capistrano
@@ -34,6 +36,10 @@ after 'deploy:check:linked_dirs', 'download:tools' do
 end
 
 before :rsync, 'copy:powershell'
+
+after 'deploy:set_current_revision', 'publish:build_number' do
+  Rake::Funnel::Integration::TeamCity::ServiceMessages.build_number(fetch(:current_revision))
+end
 
 after 'deploy:updated', 'powershell:uninstall_previous'
 after 'deploy:reverted', 'powershell:uninstall_previous'
