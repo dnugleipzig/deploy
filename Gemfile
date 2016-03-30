@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 
 gem 'capistrano', '~> 3.4'
 gem 'rake-funnel', '~> 0.15pre'
+gem 'inwx-rb', '~> 0.1'
 
 group :development do
   gem 'pry-byebug'

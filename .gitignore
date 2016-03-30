@@ -4,3 +4,4 @@ packages/
 paket-files/
 ssh/
 *.tar.gz
+domrobot.tmp

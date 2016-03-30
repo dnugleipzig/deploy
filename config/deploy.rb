@@ -30,6 +30,10 @@ set :default_env, cygwin: 'winsymlinks:nativestrict'
 
 set :linked_dirs, %w(tools)
 
+before 'deploy:check', 'dns:setup' do
+  DNS.setup(fetch(:manifest)['dns'])
+end
+
 after 'deploy:check:linked_dirs', 'download:tools' do
   task('download:webpi').invoke(File.join(shared_path, 'tools/webpi/WebpiCmd.exe'))
   task('download:nuget').invoke(File.join(shared_path, 'tools/nuget/nuget.exe'))

@@ -305,10 +305,17 @@ Describe 'Invoke-Deployment examples' {
 application:
   name: example.com
   dns:
-    -
-      type: a
-      name: example.com
-      value: 1.2.3.4
+    inwx:
+      username: env://INWX_USER
+      password: env://INWX_PASSWORD
+      records:
+        -
+          type: a
+          name: example.com
+          content: 1.2.3.4
+          ttl: 3600
+          # Where it makes sense (e.g. MX).
+          # prio: 1
 deployment:
   - requirements:
     - NETFramework451

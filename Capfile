@@ -10,6 +10,7 @@ Dir.glob('lib/capistrano/tasks/*.rake').each { |r| import r }
 # Prepend lib dir to LOAD_PATH.
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), 'lib'))
 
-require 'capistrano/environment_variables'
 require 'capistrano/custom_commands'
+require 'capistrano/dns'
+require 'capistrano/environment_variables'
 require 'capistrano/version'
