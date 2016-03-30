@@ -8,6 +8,8 @@ RSpec::Core::RakeTask.new(:spec) do |t|
 end
 
 task spec: [:paket] do
+  next unless Rake::Win32.windows?
+
   mkdir_p 'build/spec'
 
   pester = %w(

@@ -1,4 +1,6 @@
 task ps_script_analyzer: [:paket] do
+  next unless Rake::Win32.windows?
+
   analyzer = %w(
     powershell.exe
     -NoLogo
