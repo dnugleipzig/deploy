@@ -19,11 +19,21 @@
     Return
   }
 
-  Exec {
-    & .\tools\webpi\WebpiCmd.exe `
-      /Install `
-      "/Products:$($Config -Join ',')" `
-      /SuppressReboot `
-      /AcceptEula
+  $LogFile = [System.IO.Path]::GetTempFileName()
+
+  try
+  {
+    Exec {
+      & .\tools\webpi\WebpiCmd.exe `
+        /Install `
+        "/Products:$($Config -Join ',')" `
+        /SuppressReboot `
+        /AcceptEula `
+        "/Log:$LogFile"
+    }
+  }
+  finally
+  {
+    Remove-Item -Path $LogFile -ErrorAction SilentlyContinue
   }
 }
