@@ -149,24 +149,48 @@ describe DNS::Inwx do
       end
 
       context 'record does not exist' do
-        let(:records) {
-          [
-            {
-              'type' => 'a',
-              'name' => 'does-not.exist.example-test.com',
-              'content' => '1.2.3.4'
-            }
-          ]
-        }
+        context 'without name' do
+          let(:records) {
+            [
+              {
+                'type' => 'a',
+                'name' => 'example-test.com',
+                'content' => '1.2.3.4'
+              }
+            ]
+          }
 
-        it 'creates record' do
-          expect(robot).to have_received(:call).with('nameserver',
-                                                     'createRecord',
-                                                     hash_including(
-                                                       'domain' => 'example-test.com',
-                                                       'type' => 'A',
-                                                       'name' => 'does-not.exist',
-                                                       'content' => '1.2.3.4'))
+          it 'creates record' do
+            expect(robot).to have_received(:call).with('nameserver',
+                                                       'createRecord',
+                                                       hash_including(
+                                                         'domain' => 'example-test.com',
+                                                         'type' => 'A',
+                                                         'name' => '',
+                                                         'content' => '1.2.3.4'))
+          end
+        end
+
+        context 'subdomain' do
+          let(:records) {
+            [
+              {
+                'type' => 'a',
+                'name' => 'does-not.exist.example-test.com',
+                'content' => '1.2.3.4'
+              }
+            ]
+          }
+
+          it 'creates record' do
+            expect(robot).to have_received(:call).with('nameserver',
+                                                       'createRecord',
+                                                       hash_including(
+                                                         'domain' => 'example-test.com',
+                                                         'type' => 'A',
+                                                         'name' => 'does-not.exist',
+                                                         'content' => '1.2.3.4'))
+          end
         end
       end
     end
