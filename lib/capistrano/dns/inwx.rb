@@ -4,7 +4,7 @@ require 'capistrano/cacerts'
 module DNS
   class Inwx
     def initialize(config, api_endpoint = 'api.domrobot.com')
-      @user = with_env_token(config['user'])
+      @username = with_env_token(config['username'])
       @password = with_env_token(config['password'])
       @records = config.fetch('records', [])
       @api_endpoint = api_endpoint
@@ -57,8 +57,8 @@ module DNS
         robot = INWX::Domrobot.new(@api_endpoint)
         robot.client.http.ca_file = CACerts.path
 
-        puts "Logging in as #{@user} on #{@api_endpoint}"
-        robot.login(@user, @password)
+        puts "Logging in as #{@username} on #{@api_endpoint}"
+        robot.login(@username, @password)
         robot
       end
     end

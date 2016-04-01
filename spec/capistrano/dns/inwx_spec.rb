@@ -4,7 +4,7 @@ describe DNS::Inwx do
   let(:api_endpoint) { 'api.ote.domrobot.com' }
   let(:config) {
     {
-      'user' => 'agross-ote',
+      'username' => 'agross-ote',
       'password' => 'agross-ote123',
       'records' => records
     }
@@ -40,7 +40,7 @@ describe DNS::Inwx do
     context 'user and password with env:// token' do
       let(:config) {
         {
-          'user' => 'env://USER',
+          'username' => 'env://USER',
           'password' => 'env://PASSWORD'
         }
       }
@@ -53,7 +53,7 @@ describe DNS::Inwx do
       }
 
       it 'retrieves user name from environment variables' do
-        expect(subject.instance_variable_get(:@user)).to eq('user from env')
+        expect(subject.instance_variable_get(:@username)).to eq('user from env')
       end
 
       it 'retrieves password from environment variables' do
