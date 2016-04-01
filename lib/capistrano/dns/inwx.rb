@@ -14,6 +14,8 @@ module DNS
       @records.each do |record|
         ensure_record(record)
       end
+    ensure
+      logout
     end
 
     private
@@ -64,6 +66,7 @@ module DNS
     end
 
     def logout
+      return unless @robot
       puts 'Logging out'
       robot.logout
     end

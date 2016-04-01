@@ -12,7 +12,10 @@ describe DNS::Inwx do
 
   let!(:robot) {
     api = INWX::Domrobot.new(api_endpoint)
-    allow(api).to receive(:call).and_call_original
+
+    [:login, :logout, :call].each do |method|
+      allow(api).to receive(method).and_call_original
+    end
 
     # Disallow updates.
     %w(createRecord updateRecord deleteRecord).each do |method|
@@ -63,6 +66,76 @@ describe DNS::Inwx do
   end
 
   describe '#run' do
+    describe 'login and logout' do
+      context 'no records' do
+        let(:records) { [] }
+
+        before {
+          subject.run
+        }
+
+        it 'does not log in' do
+          expect(robot).not_to have_received(:login)
+        end
+
+        it 'does not log out' do
+          expect(robot).not_to have_received(:logout)
+        end
+      end
+
+      context 'some records' do
+        let(:records) {
+          [
+            {
+              'type' => 'a',
+              'name' => 'something.example-test.com',
+              'content' => '1.2.3.4'
+            }
+          ]
+        }
+
+        before {
+          subject.run
+        }
+
+        it 'logs in' do
+          expect(robot).to have_received(:login)
+        end
+
+        it 'logs out' do
+          expect(robot).to have_received(:logout)
+        end
+      end
+
+      context 'record updates fail' do
+        let(:records) {
+          [
+            {
+              'type' => 'a',
+              'name' => 'creating-this-fails.example-test.com',
+              'content' => '1.2.3.4'
+            }
+          ]
+        }
+
+        before {
+          allow(robot).to receive(:call).with('nameserver', anything, anything).and_raise 'some error'
+        }
+
+        before {
+          subject.run rescue nil # rubocop:disable Style/RescueModifier
+        }
+
+        it 'logs in' do
+          expect(robot).to have_received(:login)
+        end
+
+        it 'logs out' do
+          expect(robot).to have_received(:logout)
+        end
+      end
+    end
+
     context 'domain is not registered with INWX account' do
       let(:records) {
         [
