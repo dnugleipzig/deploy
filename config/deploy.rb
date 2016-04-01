@@ -28,7 +28,7 @@ set :deploy_to, File.join(fetch(:deploy_root), fetch(:stage).to_s, fetch(:applic
 
 set :default_env, cygwin: 'winsymlinks:nativestrict'
 
-set :linked_dirs, %w(tools)
+set :linked_dirs, %w(tools/nuget tools/webpi)
 
 before 'deploy:check', 'dns:setup' do
   DNS.setup(fetch(:manifest)['dns'])
