@@ -148,7 +148,7 @@ describe DNS::Inwx do
       }
 
       it 'fails' do
-        expect { subject.run }.to raise_error('Domain example.com is not managed by this account')
+        expect { subject.run }.to raise_error(/^Domain example.com is not managed by this account:/)
       end
     end
 

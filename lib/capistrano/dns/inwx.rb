@@ -100,7 +100,7 @@ module DNS
     def find_managed_domain(domain)
       domains = robot.call('nameserver', 'list', domain: domain)
       if domains.fetch('resData', {}).fetch('count', 0) == 0
-        raise(ArgumentError, "Domain #{domain} is not managed by this account")
+        raise(ArgumentError, "Domain #{domain} is not managed by this account: #{domains}")
       end
     end
 
