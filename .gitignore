@@ -3,5 +3,6 @@ build/
 packages/
 paket-files/
 ssh/
+.cache/
 *.tar.gz
 domrobot.tmp

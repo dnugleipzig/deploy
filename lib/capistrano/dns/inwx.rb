@@ -1,5 +1,5 @@
 require 'inwx/domrobot'
-require 'capistrano/cacerts'
+require 'capistrano/ca_certs'
 
 module DNS
   class Inwx
