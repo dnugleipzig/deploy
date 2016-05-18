@@ -49,3 +49,4 @@ after 'deploy:updated', 'powershell:uninstall_previous'
 after 'deploy:reverted', 'powershell:uninstall_previous'
 
 before 'deploy:publishing', 'powershell:install_current'
+after  'deploy:published', 'teamcity:publish_canonical_domain'
