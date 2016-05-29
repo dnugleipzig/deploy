@@ -3,7 +3,9 @@ require 'rake/funnel'
 STDOUT.sync = STDERR.sync = true
 
 # config valid only for current version of Capistrano
-lock '3.4.0'
+lock '3.5.0'
+
+set :format_options, log_file: 'build/log/capistrano.log'
 
 set :ssh_options,
     user: 'capistrano',
@@ -31,7 +33,7 @@ set :default_env, cygwin: 'winsymlinks:nativestrict'
 set :linked_dirs, %w(tools/nuget tools/webpi)
 
 before 'deploy:check', 'dns:setup' do
-  DNS.setup(fetch(:manifest).fetch('application', {})['dns'])
+  task('dns:setup').invoke(fetch(:manifest).fetch('application', {})['dns'])
 end
 
 after 'deploy:check:linked_dirs', 'download:tools' do
