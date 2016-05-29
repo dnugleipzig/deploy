@@ -32,7 +32,7 @@ set :default_env, cygwin: 'winsymlinks:nativestrict'
 
 set :linked_dirs, %w(tools/nuget tools/webpi)
 
-before 'deploy:check', 'dns:setup' do
+before 'deploy:check', 'dns' do
   task('dns:setup').invoke(fetch(:manifest).fetch('application', {})['dns'])
 end
 

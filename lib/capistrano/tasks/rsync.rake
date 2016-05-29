@@ -6,6 +6,8 @@ end
 
 desc 'Stage and rsync to the server (or its cache).'
 task :rsync do
+  next if dry_run?
+
   on release_roles(:all) do |role|
     user = if role.user
              role.user
