@@ -2,8 +2,10 @@ require 'rake'
 
 module CACerts
   class << self
+    SECONDS_PER_DAY = 86_400
+
     def path
-      ENV['SSL_CERT_FILE'] = download if Rake::Win32.windows?
+      ENV['SSL_CERT_FILE'] = prefer_cached || download if Rake::Win32.windows?
     end
 
     private
@@ -36,6 +38,10 @@ module CACerts
 
     def cache
       File.expand_path('.cache/ruby-cacerts.pem')
+    end
+
+    def prefer_cached
+      cache if File.exist?(cache) && File.mtime(cache) > Time.at(Time.now.to_i - SECONDS_PER_DAY)
     end
 
     def try_cached
