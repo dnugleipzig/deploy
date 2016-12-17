@@ -1,16 +1,42 @@
 require 'capistrano/dns'
+require 'capistrano/ca_certs'
 
 describe DNS::Inwx do
+  subject {
+    allow(INWX::Domrobot).to receive(:new).and_return(robot)
+    described_class.new(config, api_endpoint)
+  }
+
+  let(:tld) { 'example.com' }
+  let(:exists) {
+    {
+      a: {
+        domain: tld,
+        type: 'A',
+        name: 'exists-as-a',
+        content: '1.2.3.4'
+      },
+      aaaa: {
+        domain: tld,
+        type: 'AAAA',
+        name: 'exists-as-aaaa',
+        content: '::1'
+      }
+    }
+  }
+
   let(:api_endpoint) { 'api.ote.domrobot.com' }
+  let(:username) { 'agross-ote' }
+  let(:password) { 'agross-ote123' }
   let(:config) {
     {
-      'username' => 'agross-ote',
-      'password' => 'agross-ote123',
+      'username' => username,
+      'password' => password,
       'records' => records
     }
   }
 
-  let!(:robot) {
+  let(:robot) {
     api = INWX::Domrobot.new(api_endpoint)
 
     [:login, :logout, :call].each do |method|
@@ -24,35 +50,66 @@ describe DNS::Inwx do
       allow(api).to receive(:call).with('nameserver', method, anything).and_return(result)
     end
 
-    allow(INWX::Domrobot).to receive(:new).and_return(api)
-
     api
   }
 
+  def prime_inwx_test_account # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+    allow(CACerts).to receive(:puts)
+
+    primer = INWX::Domrobot.new(api_endpoint)
+    primer.client.http.ca_file = CACerts.path
+
+    begin
+      result = primer.login(username, password)
+      expect(result).to include('code' => 1000)
+
+      result = primer.call('nameserver',
+                           'create',
+                           domain: tld,
+                           type: :MASTER,
+                           ns: %w(ns.ote.inwx.de ns2.ote.inwx.de))
+      expect(result).to include('code' => 1000).or include('code' => 2302)
+
+      exists.each do |type, record|
+        result = primer.call('nameserver', 'info', record)
+        expect(result).to include('code' => 1000)
+        if result['resData'].key?('record')
+          exists[type][:id] = result['resData']['record'].first['id']
+          next
+        end
+
+        result = primer.call('nameserver', 'createRecord', record)
+        expect(result).to include('code' => 1000)
+        exists[type][:id] = result['resData']['id']
+      end
+    ensure
+      primer.logout
+    end
+  end
+
   before {
+    prime_inwx_test_account
+
     allow(subject).to receive(:warn)
     allow(subject).to receive(:puts)
     allow(CACerts).to receive(:puts)
   }
 
-  subject {
-    described_class.new(config, api_endpoint)
-  }
-
   describe '#new' do
     context 'user and password with env:// token' do
+      subject {
+        allow(ENV).to receive(:[]).with('USER').and_return('user from env')
+        allow(ENV).to receive(:[]).with('PASSWORD').and_return('password from env')
+
+        allow(INWX::Domrobot).to receive(:new).and_return(robot)
+        described_class.new(config, api_endpoint)
+      }
+
       let(:config) {
         {
           'username' => 'env://USER',
           'password' => 'env://PASSWORD'
         }
-      }
-
-      subject {
-        allow(ENV).to receive(:[]).with('USER').and_return('user from env')
-        allow(ENV).to receive(:[]).with('PASSWORD').and_return('password from env')
-
-        described_class.new(config, api_endpoint)
       }
 
       it 'retrieves user name from environment variables' do
@@ -88,7 +145,7 @@ describe DNS::Inwx do
           [
             {
               'type' => 'a',
-              'name' => 'something.example-test.com',
+              'name' => "something.#{tld}",
               'content' => '1.2.3.4'
             }
           ]
@@ -112,7 +169,7 @@ describe DNS::Inwx do
           [
             {
               'type' => 'a',
-              'name' => 'creating-this-fails.example-test.com',
+              'name' => "creating-this-fails.#{tld}",
               'content' => '1.2.3.4'
             }
           ]
@@ -141,14 +198,14 @@ describe DNS::Inwx do
         [
           {
             'type' => 'a',
-            'name' => 'foo.example.com',
+            'name' => 'foo.not-our-domain.com',
             'content' => '1.2.3.4'
           }
         ]
       }
 
       it 'fails' do
-        expect { subject.run }.to raise_error(/^Domain example.com is not managed by this account:/)
+        expect { subject.run }.to raise_error(/^Domain not-our-domain.com is not managed by this account:/)
       end
     end
 
@@ -163,7 +220,7 @@ describe DNS::Inwx do
             [
               {
                 'type' => 'a',
-                'name' => 'exists-as-a.example-test.com',
+                'name' => "#{exists[:a][:name]}.#{tld}",
                 'content' => '1.2.3.4'
               }
             ]
@@ -181,7 +238,7 @@ describe DNS::Inwx do
             [
               {
                 'type' => 'a',
-                'name' => 'exists-as-a.example-test.com',
+                'name' => "#{exists[:a][:name]}.#{tld}",
                 'content' => '127.0.0.1'
               }
             ]
@@ -191,9 +248,9 @@ describe DNS::Inwx do
             expect(robot).to have_received(:call).with('nameserver',
                                                        'updateRecord',
                                                        hash_including(
-                                                         'id' => 28_994,
+                                                         'id' => exists[:a][:id],
                                                          'type' => 'A',
-                                                         'name' => 'exists-as-a',
+                                                         'name' => exists[:a][:name],
                                                          'content' => '127.0.0.1'))
           end
         end
@@ -203,7 +260,7 @@ describe DNS::Inwx do
             [
               {
                 'type' => 'a',
-                'name' => 'exists-as-aaaa.example-test.com',
+                'name' => "#{exists[:aaaa][:name]}.#{tld}",
                 'content' => '1.2.3.4'
               }
             ]
@@ -213,9 +270,9 @@ describe DNS::Inwx do
             expect(robot).to have_received(:call).with('nameserver',
                                                        'createRecord',
                                                        hash_including(
-                                                         'domain' => 'example-test.com',
+                                                         'domain' => tld,
                                                          'type' => 'A',
-                                                         'name' => 'exists-as-aaaa',
+                                                         'name' => exists[:aaaa][:name],
                                                          'content' => '1.2.3.4'))
           end
         end
@@ -227,7 +284,7 @@ describe DNS::Inwx do
             [
               {
                 'type' => 'a',
-                'name' => 'example-test.com',
+                'name' => tld,
                 'content' => '1.2.3.4'
               }
             ]
@@ -237,7 +294,7 @@ describe DNS::Inwx do
             expect(robot).to have_received(:call).with('nameserver',
                                                        'createRecord',
                                                        hash_including(
-                                                         'domain' => 'example-test.com',
+                                                         'domain' => tld,
                                                          'type' => 'A',
                                                          'name' => '',
                                                          'content' => '1.2.3.4'))
@@ -249,7 +306,7 @@ describe DNS::Inwx do
             [
               {
                 'type' => 'a',
-                'name' => 'does-not.exist.example-test.com',
+                'name' => "does-not.exist.#{tld}",
                 'content' => '1.2.3.4'
               }
             ]
@@ -259,7 +316,7 @@ describe DNS::Inwx do
             expect(robot).to have_received(:call).with('nameserver',
                                                        'createRecord',
                                                        hash_including(
-                                                         'domain' => 'example-test.com',
+                                                         'domain' => tld,
                                                          'type' => 'A',
                                                          'name' => 'does-not.exist',
                                                          'content' => '1.2.3.4'))
