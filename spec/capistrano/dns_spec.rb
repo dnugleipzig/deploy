@@ -56,11 +56,9 @@ describe DNS do
       }
 
       class AnotherProvider
-        def initialize(config)
-        end
+        def initialize(config); end
 
-        def run
-        end
+        def run; end
       end
 
       before {

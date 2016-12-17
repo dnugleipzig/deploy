@@ -11,3 +11,21 @@ Metrics/LineLength:
 
 Style/BlockDelimiters:
   Enabled: false
+
+Style/EndOfLine:
+  Enabled: false
+
+RSpec/ExampleLength:
+  Enabled: false
+
+RSpec/NamedSubject:
+  Enabled: false
+
+RSpec/NestedGroups:
+  Enabled: false
+
+RSpec/SubjectStub:
+  Enabled: false
+
+RSpec/VerifiedDoubles:
+  Enabled: false

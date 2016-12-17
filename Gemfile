@@ -1,15 +1,15 @@
 source 'https://rubygems.org'
 
 gem 'capistrano', '~> 3.4'
-gem 'rake-funnel', '~> 0.15pre'
 gem 'inwx-rb', '~> 0.1'
+gem 'rake-funnel', '~> 0.15pre'
 
 group :development do
-  gem 'pry-byebug'
   gem 'awesome_print'
+  gem 'pry-byebug'
 
   # RuboCop.
-  gem 'rubocop', '~> 0.37.2'
+  gem 'rubocop', '~> 0.46'
   gem 'rubocop-checkstyle_formatter'
   gem 'rubocop-rspec'
 
@@ -20,10 +20,10 @@ group :development do
 
   # guard.
   gem 'guard-bundler'
+  gem 'guard-rspec'
   gem 'guard-rubocop'
   gem 'guard-shell'
-  gem 'guard-rspec'
 
-  gem 'wdm', '>= 0.1.0', require: false if Gem.win_platform?
   gem 'ruby_gntp'
+  gem 'wdm', '>= 0.1.0', require: false if Gem.win_platform?
 end

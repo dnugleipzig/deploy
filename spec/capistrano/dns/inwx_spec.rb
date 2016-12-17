@@ -226,7 +226,7 @@ describe DNS::Inwx do
             ]
           }
 
-          it 'does not change record' do
+          it 'does not change record' do # rubocop:disable RSpec/MultipleExpectations
             expect(robot).not_to have_received(:call).with('nameserver', 'createRecord', anything)
             expect(robot).not_to have_received(:call).with('nameserver', 'updateRecord', anything)
             expect(robot).not_to have_received(:call).with('nameserver', 'deleteRecord', anything)
@@ -247,11 +247,10 @@ describe DNS::Inwx do
           it 'updates record' do
             expect(robot).to have_received(:call).with('nameserver',
                                                        'updateRecord',
-                                                       hash_including(
-                                                         'id' => exists[:a][:id],
-                                                         'type' => 'A',
-                                                         'name' => exists[:a][:name],
-                                                         'content' => '127.0.0.1'))
+                                                       hash_including('id' => exists[:a][:id],
+                                                                      'type' => 'A',
+                                                                      'name' => exists[:a][:name],
+                                                                      'content' => '127.0.0.1'))
           end
         end
 
@@ -269,11 +268,10 @@ describe DNS::Inwx do
           it 'creates record' do
             expect(robot).to have_received(:call).with('nameserver',
                                                        'createRecord',
-                                                       hash_including(
-                                                         'domain' => tld,
-                                                         'type' => 'A',
-                                                         'name' => exists[:aaaa][:name],
-                                                         'content' => '1.2.3.4'))
+                                                       hash_including('domain' => tld,
+                                                                      'type' => 'A',
+                                                                      'name' => exists[:aaaa][:name],
+                                                                      'content' => '1.2.3.4'))
           end
         end
       end
@@ -293,11 +291,10 @@ describe DNS::Inwx do
           it 'creates record' do
             expect(robot).to have_received(:call).with('nameserver',
                                                        'createRecord',
-                                                       hash_including(
-                                                         'domain' => tld,
-                                                         'type' => 'A',
-                                                         'name' => '',
-                                                         'content' => '1.2.3.4'))
+                                                       hash_including('domain' => tld,
+                                                                      'type' => 'A',
+                                                                      'name' => '',
+                                                                      'content' => '1.2.3.4'))
           end
         end
 
@@ -315,11 +312,10 @@ describe DNS::Inwx do
           it 'creates record' do
             expect(robot).to have_received(:call).with('nameserver',
                                                        'createRecord',
-                                                       hash_including(
-                                                         'domain' => tld,
-                                                         'type' => 'A',
-                                                         'name' => 'does-not.exist',
-                                                         'content' => '1.2.3.4'))
+                                                       hash_including('domain' => tld,
+                                                                      'type' => 'A',
+                                                                      'name' => 'does-not.exist',
+                                                                      'content' => '1.2.3.4'))
           end
         end
       end

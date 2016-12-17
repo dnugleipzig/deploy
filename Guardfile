@@ -4,7 +4,7 @@ guard :bundler do
   watch('Gemfile')
 end
 
-group :specs, halt_on_fail: true do
+group :specs, halt_on_fail: true do # rubocop:disable Metrics/BlockLength
   guard :rspec,
         all_on_start: true,
         all_after_pass: true,
@@ -16,7 +16,7 @@ group :specs, halt_on_fail: true do
     watch('spec/spec_helper.rb') { 'spec' }
   end
 
-  guard :shell do
+  guard :shell do # rubocop:disable Metrics/BlockLength
     def powershell
       %w(
         powershell.exe
