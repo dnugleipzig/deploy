@@ -45,7 +45,7 @@ describe VersionReader do
     }
 
     before {
-      allow(described_class).to receive(:fetch).with(:rsync_stage).and_return('app')
+      allow(described_class).to receive(:fetch).with(:rsync_options).and_return(source: 'app')
       allow(Rake::Funnel::Support::BinaryVersionReader).to \
         receive(:read_from).and_return(OpenStruct.new(file_version: '4.5.6'))
     }
@@ -61,7 +61,7 @@ describe VersionReader do
     }
 
     before {
-      allow(described_class).to receive(:fetch).with(:rsync_stage).and_return('app')
+      allow(described_class).to receive(:fetch).with(:rsync_options).and_return(source: 'app')
       allow(Rake::Funnel::Support::BinaryVersionReader).to \
         receive(:read_from).and_raise('read error')
     }

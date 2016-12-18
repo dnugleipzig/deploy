@@ -17,7 +17,7 @@ class VersionReader
     def from_binary(value)
       return unless value.is_a?(Hash) && value['from']
 
-      file = File.join(fetch(:rsync_stage), value['from'])
+      file = File.join(fetch(:rsync_options)[:source], value['from'])
       read_version_from(file)
     end
 

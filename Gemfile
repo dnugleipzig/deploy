@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
-gem 'capistrano', '~> 3.4'
+gem 'capistrano', '~> 3.7'
+gem 'capistrano-scm-rsync'
 gem 'inwx-rb', '~> 0.1'
 gem 'rake-funnel', '~> 0.15pre'
 

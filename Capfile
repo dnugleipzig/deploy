@@ -1,10 +1,13 @@
-# Load DSL and set up stages
+# Load DSL and set up stages.
 require 'capistrano/setup'
 
-# Include default deployment tasks
+# Include default deployment tasks.
 require 'capistrano/deploy'
 
-# Load custom tasks from `lib/capistrano/tasks` if you have any defined
+require 'capistrano/scm/rsync'
+install_plugin Capistrano::SCM::Rsync
+
+# Load custom tasks from `lib/capistrano/tasks` if you have any defined.
 Dir.glob('lib/capistrano/tasks/*.rake').each { |r| import r }
 
 # Prepend lib dir to LOAD_PATH.
