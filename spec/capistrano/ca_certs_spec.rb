@@ -4,9 +4,6 @@ require 'open-uri'
 describe CACerts do
   before {
     allow(Rake::Win32).to receive(:windows?).and_return(windows)
-  }
-
-  before {
     allow(ENV).to receive(:[]=)
   }
 

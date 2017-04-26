@@ -65,9 +65,7 @@ describe DNS do
         allow(described_class).to receive(:download_cacerts)
         allow(DNS::Inwx).to receive(:new).and_return(double(DNS::Inwx).as_null_object)
         allow(AnotherProvider).to receive(:new).and_return(double(AnotherProvider).as_null_object)
-      }
 
-      before {
         described_class.setup(config)
       }
 

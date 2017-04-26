@@ -1,3 +1,5 @@
+# rubocop:disable Metrics/BlockLength
+
 namespace :download do
   desc 'Download Web Platform Installer'
   task :webpi, [:executable] do |_t, args|

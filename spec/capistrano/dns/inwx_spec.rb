@@ -39,7 +39,7 @@ describe DNS::Inwx do
   let(:robot) {
     api = INWX::Domrobot.new(api_endpoint)
 
-    [:login, :logout, :call].each do |method|
+    %i(login logout call).each do |method|
       allow(api).to receive(method).and_call_original
     end
 
@@ -177,9 +177,7 @@ describe DNS::Inwx do
 
         before {
           allow(robot).to receive(:call).with('nameserver', anything, anything).and_raise 'some error'
-        }
 
-        before {
           subject.run rescue nil # rubocop:disable Style/RescueModifier
         }
 

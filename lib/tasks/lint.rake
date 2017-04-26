@@ -1,1 +1,1 @@
-task lint: [:rubocop, :ps_script_analyzer]
+task lint: %i(rubocop ps_script_analyzer)
