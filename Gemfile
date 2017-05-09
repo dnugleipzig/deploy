@@ -25,6 +25,18 @@ group :development do
   gem 'guard-rubocop'
   gem 'guard-shell'
 
-  gem 'ruby_gntp'
-  gem 'wdm', '>= 0.1.0', require: false if Gem.win_platform?
+  # guard notifications.
+  install_if(-> { Gem.win_platform? }) do
+    gem 'ruby_gntp'
+    gem 'wdm'
+  end
+
+  install_if(-> { RbConfig::CONFIG['target_os'] =~ /linux/i }) do
+    gem 'rb-inotify'
+  end
+
+  install_if(-> { RbConfig::CONFIG['target_os'] =~ /mac|darwin/i }) do
+    gem 'rb-fsevent'
+    gem 'terminal-notifier-guard'
+  end
 end
