@@ -4,6 +4,10 @@ gem 'capistrano', '~> 3.7'
 gem 'capistrano-scm-rsync'
 gem 'inwx-rb', '~> 0.1'
 gem 'rake-funnel', '~> 0.15pre'
+# Required for inwx-rb.
+install_if(-> { RUBY_VERSION >= '2.4' }) do
+  gem 'xmlrpc', '~> 0.3'
+end
 
 group :development do
   gem 'awesome_print'
