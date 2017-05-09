@@ -1,8 +1,6 @@
 NUGET
   remote: https://www.powershellgallery.com/api/v2
-  specs:
-    Pester (3.4.0)
-    PSScriptAnalyzer (1.4.0)
+    Pester (3.4.6)
+    PSScriptAnalyzer (1.11.1)
   remote: https://www.nuget.org/api/v2
-  specs:
-    YamlDotNet (3.8.0)
+    YamlDotNet (3.9)
