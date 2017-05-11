@@ -23,6 +23,9 @@ group :development do
   gem 'simplecov', '~> 0.11'
   gem 'simplecov-teamcity-summary', '~> 0.1'
 
+  gem 'codeclimate-test-reporter'
+  gem 'coveralls'
+
   # guard.
   gem 'guard-bundler'
   gem 'guard-rspec'

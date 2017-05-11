@@ -1,6 +1,4 @@
-# Use the new container-based Travis infrastructure.
 sudo: false
-
 language: ruby
 cache:
   - bundler
@@ -18,9 +16,9 @@ matrix:
     - rvm: ruby-head
 
 before_install: gem install bundler
-script:
-  - bundle exec rake
+after_success:
+  - bundle exec codeclimate-test-reporter
 
-notifications:
-  email:
-    on_failure: always
+addons:
+  code_climate:
+    repo_token: 1f0d32b3520856e69d94369434090c1bac6ec4ebbcbc772c7d88555de0a1e814
