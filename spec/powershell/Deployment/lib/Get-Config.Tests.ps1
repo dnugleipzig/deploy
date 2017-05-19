@@ -24,11 +24,11 @@ is-also-null: null
         $Config.foo | Should Be 42
       }
 
-      It 'supports null with ~' {
+      It 'supports null with "~"' {
         $Config.'is-null' | Should Be $null
       }
 
-      It 'supports null with null' {
+      It 'supports null with "null"' {
         $Config.'is-also-null' | Should Be $null
       }
     }
@@ -80,7 +80,7 @@ array:
 
       Set-Content -Path $DeployYaml -Value @"
 hash:
-  hash:
+  array:
     - 42
 "@
 
@@ -88,12 +88,12 @@ hash:
 
       It 'converts to hash' {
         $Config.hash.GetType().Name | Should Be 'Hashtable'
-        $Config.hash.hash.GetType().Name | Should Be 'Object[]'
-        $Config.hash.hash[0].GetType().Name | Should Be 'Int32'
+        $Config.hash.array.GetType().Name | Should Be 'Object[]'
+        $Config.hash.array[0].GetType().Name | Should Be 'Int32'
       }
 
       It 'converts data' {
-        $Config.hash.hash[0] | Should Be 42
+        $Config.hash.array[0] | Should Be 42
       }
     }
 
