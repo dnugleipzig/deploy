@@ -10,13 +10,13 @@ Metrics/BlockLength:
 Metrics/LineLength:
   Enabled: false
 
+Layout/EndOfLine:
+  Enabled: false
+
 Style/BlockDelimiters:
   Enabled: false
 
 Style/Documentation:
-  Enabled: false
-
-Style/EndOfLine:
   Enabled: false
 
 Style/PercentLiteralDelimiters:
