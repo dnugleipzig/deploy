@@ -9,7 +9,7 @@ describe DNS do
     end
 
     context 'no records' do
-      let(:config) {
+      let(:config) do
         {
           inwx:
           {
@@ -18,7 +18,7 @@ describe DNS do
             records: []
           }
         }
-      }
+      end
 
       it 'succeeds' do
         described_class.setup(config)
@@ -26,7 +26,7 @@ describe DNS do
     end
 
     context 'records' do
-      let(:config) {
+      let(:config) do
         {
           inwx:
           {
@@ -53,7 +53,7 @@ describe DNS do
             ]
           }
         }
-      }
+      end
 
       class AnotherProvider
         def initialize(config); end
@@ -61,13 +61,13 @@ describe DNS do
         def run; end
       end
 
-      before {
+      before do
         allow(described_class).to receive(:download_cacerts)
         allow(DNS::Inwx).to receive(:new).and_return(double(DNS::Inwx).as_null_object)
         allow(AnotherProvider).to receive(:new).and_return(double(AnotherProvider).as_null_object)
 
         described_class.setup(config)
-      }
+      end
 
       it 'creates first adapter' do
         expect(DNS::Inwx).to have_received(:new).with(config[:inwx])

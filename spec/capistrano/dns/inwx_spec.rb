@@ -2,13 +2,13 @@ require 'capistrano/dns'
 require 'capistrano/ca_certs'
 
 describe DNS::Inwx do
-  subject {
+  subject do
     allow(INWX::Domrobot).to receive(:new).and_return(robot)
     described_class.new(config, api_endpoint)
-  }
+  end
 
   let(:tld) { 'example.com' }
-  let(:exists) {
+  let(:exists) do
     {
       a: {
         domain: tld,
@@ -23,20 +23,20 @@ describe DNS::Inwx do
         content: '::1'
       }
     }
-  }
+  end
 
   let(:api_endpoint) { 'api.ote.domrobot.com' }
   let(:username) { 'agross-ote' }
   let(:password) { 'agross-ote123' }
-  let(:config) {
+  let(:config) do
     {
       'username' => username,
       'password' => password,
       'records' => records
     }
-  }
+  end
 
-  let(:robot) {
+  let(:robot) do
     api = INWX::Domrobot.new(api_endpoint)
 
     %i(login logout call).each do |method|
@@ -51,7 +51,7 @@ describe DNS::Inwx do
     end
 
     api
-  }
+  end
 
   def prime_inwx_test_account # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     allow(CACerts).to receive(:puts)
@@ -87,30 +87,30 @@ describe DNS::Inwx do
     end
   end
 
-  before {
+  before do
     prime_inwx_test_account
 
     allow(subject).to receive(:warn)
     allow(subject).to receive(:puts)
     allow(CACerts).to receive(:puts)
-  }
+  end
 
   describe '#new' do
     context 'user and password with env:// token' do
-      subject {
+      subject do
         allow(ENV).to receive(:[]).with('USER').and_return('user from env')
         allow(ENV).to receive(:[]).with('PASSWORD').and_return('password from env')
 
         allow(INWX::Domrobot).to receive(:new).and_return(robot)
         described_class.new(config, api_endpoint)
-      }
+      end
 
-      let(:config) {
+      let(:config) do
         {
           'username' => 'env://USER',
           'password' => 'env://PASSWORD'
         }
-      }
+      end
 
       it 'retrieves user name from environment variables' do
         expect(subject.instance_variable_get(:@username)).to eq('user from env')
@@ -127,9 +127,9 @@ describe DNS::Inwx do
       context 'no records' do
         let(:records) { [] }
 
-        before {
+        before do
           subject.run
-        }
+        end
 
         it 'does not log in' do
           expect(robot).not_to have_received(:login)
@@ -141,7 +141,7 @@ describe DNS::Inwx do
       end
 
       context 'some records' do
-        let(:records) {
+        let(:records) do
           [
             {
               'type' => 'a',
@@ -149,11 +149,11 @@ describe DNS::Inwx do
               'content' => '1.2.3.4'
             }
           ]
-        }
+        end
 
-        before {
+        before do
           subject.run
-        }
+        end
 
         it 'logs in' do
           expect(robot).to have_received(:login)
@@ -165,7 +165,7 @@ describe DNS::Inwx do
       end
 
       context 'record updates fail' do
-        let(:records) {
+        let(:records) do
           [
             {
               'type' => 'a',
@@ -173,13 +173,13 @@ describe DNS::Inwx do
               'content' => '1.2.3.4'
             }
           ]
-        }
+        end
 
-        before {
+        before do
           allow(robot).to receive(:call).with('nameserver', anything, anything).and_raise 'some error'
 
           subject.run rescue nil # rubocop:disable Style/RescueModifier
-        }
+        end
 
         it 'logs in' do
           expect(robot).to have_received(:login)
@@ -192,7 +192,7 @@ describe DNS::Inwx do
     end
 
     context 'domain is not registered with INWX account' do
-      let(:records) {
+      let(:records) do
         [
           {
             'type' => 'a',
@@ -200,7 +200,7 @@ describe DNS::Inwx do
             'content' => '1.2.3.4'
           }
         ]
-      }
+      end
 
       it 'fails' do
         expect { subject.run }.to raise_error(/^Domain not-our-domain.com is not managed by this account:/)
@@ -208,13 +208,13 @@ describe DNS::Inwx do
     end
 
     context 'domain is registered with INWX account' do
-      before {
+      before do
         subject.run
-      }
+      end
 
       context 'record exists' do
         context 'with matching value' do
-          let(:records) {
+          let(:records) do
             [
               {
                 'type' => 'a',
@@ -222,7 +222,7 @@ describe DNS::Inwx do
                 'content' => '1.2.3.4'
               }
             ]
-          }
+          end
 
           it 'does not change record' do # rubocop:disable RSpec/MultipleExpectations
             expect(robot).not_to have_received(:call).with('nameserver', 'createRecord', anything)
@@ -232,7 +232,7 @@ describe DNS::Inwx do
         end
 
         context 'with different value' do
-          let(:records) {
+          let(:records) do
             [
               {
                 'type' => 'a',
@@ -240,7 +240,7 @@ describe DNS::Inwx do
                 'content' => '127.0.0.1'
               }
             ]
-          }
+          end
 
           it 'updates record' do
             expect(robot).to have_received(:call).with('nameserver',
@@ -253,7 +253,7 @@ describe DNS::Inwx do
         end
 
         context 'with different type' do
-          let(:records) {
+          let(:records) do
             [
               {
                 'type' => 'a',
@@ -261,7 +261,7 @@ describe DNS::Inwx do
                 'content' => '1.2.3.4'
               }
             ]
-          }
+          end
 
           it 'creates record' do
             expect(robot).to have_received(:call).with('nameserver',
@@ -276,7 +276,7 @@ describe DNS::Inwx do
 
       context 'record does not exist' do
         context 'without name' do
-          let(:records) {
+          let(:records) do
             [
               {
                 'type' => 'a',
@@ -284,7 +284,7 @@ describe DNS::Inwx do
                 'content' => '1.2.3.4'
               }
             ]
-          }
+          end
 
           it 'creates record' do
             expect(robot).to have_received(:call).with('nameserver',
@@ -297,7 +297,7 @@ describe DNS::Inwx do
         end
 
         context 'subdomain' do
-          let(:records) {
+          let(:records) do
             [
               {
                 'type' => 'a',
@@ -305,7 +305,7 @@ describe DNS::Inwx do
                 'content' => '1.2.3.4'
               }
             ]
-          }
+          end
 
           it 'creates record' do
             expect(robot).to have_received(:call).with('nameserver',

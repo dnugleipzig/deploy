@@ -30,8 +30,10 @@ set :rsync_options,
 set :manifest, YAML.load_file(File.join(fetch(:rsync_options)[:source],
                                         'deploy.yaml'))
 
-set :deploy_root, ENV['DEPLOY_ROOT'] || raise('Could not determine deployment root from DEPLOY_ROOT environment variable')
-set :deploy_server, ENV['DEPLOY_SERVER'] || raise('Could not determine server from DEPLOY_SERVER environment variable')
+set :deploy_root, ENV['DEPLOY_ROOT'] \
+  || raise('Could not determine deployment root from DEPLOY_ROOT environment variable')
+set :deploy_server, ENV['DEPLOY_SERVER'] \
+  || raise('Could not determine server from DEPLOY_SERVER environment variable')
 
 server fetch(:deploy_server), roles: %w(app)
 

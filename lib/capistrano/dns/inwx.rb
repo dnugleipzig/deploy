@@ -85,9 +85,9 @@ module DNS
 
       record.merge('domain' => domain, 'name' => hostname)
             .reject { |_, value| value.nil? }
-            .tap { |h|
+            .tap do |h|
               h['type'] = h['type'].upcase if h['type'].respond_to?(:upcase)
-            }
+            end
     end
 
     def records(query)

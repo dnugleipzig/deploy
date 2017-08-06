@@ -8,12 +8,9 @@ Metrics/BlockLength:
     - spec/**/*_spec.rb
 
 Metrics/LineLength:
-  Enabled: false
+  Max: 120
 
 Layout/EndOfLine:
-  Enabled: false
-
-Style/BlockDelimiters:
   Enabled: false
 
 Style/Documentation:
@@ -38,7 +35,7 @@ RSpec/NamedSubject:
   Enabled: false
 
 RSpec/NestedGroups:
-  Enabled: false
+  Max: 6
 
 RSpec/SubjectStub:
   Enabled: false
