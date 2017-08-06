@@ -2,8 +2,8 @@ require 'rake/funnel'
 
 STDOUT.sync = STDERR.sync = true
 
-# config valid only for current version of Capistrano
-lock '3.8.1'
+# Config valid only for current version of Capistrano.
+lock '3.9.0'
 
 set :format_options, log_file: 'build/log/capistrano.log'
 
