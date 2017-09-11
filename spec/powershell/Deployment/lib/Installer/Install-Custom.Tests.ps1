@@ -26,7 +26,7 @@ Describe 'Install-Custom' {
 
     Context 'install' {
       Mock -Module Deployment Convert-Path { $File }
-      Mock -Module Deployment Test-Path { true }
+      Mock -Module Deployment Test-Path { $true }
       Mock -Module Deployment Install-Script
 
       Install-Custom -Config $Config
@@ -42,7 +42,7 @@ Describe 'Install-Custom' {
 
     Context 'uninstall' {
       Mock -Module Deployment Convert-Path { $File }
-      Mock -Module Deployment Test-Path { true }
+      Mock -Module Deployment Test-Path { $true }
       Mock -Module Deployment Uninstall-Script
 
       Install-Custom -Uninstall -Config $Config
