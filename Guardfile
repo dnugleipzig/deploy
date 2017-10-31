@@ -33,12 +33,12 @@ group :specs, halt_on_fail: true do # rubocop:disable Metrics/BlockLength
     end
 
     def pester(*paths) # rubocop:disable Metrics/MethodLength
-      command = <<-EOF
+      command = <<-COMMAND
         & {
           Import-Module -Name ./packages/Pester/Pester;
           Invoke-Pester -Path '%s' -EnableExit
         }
-      EOF
+      COMMAND
 
       paths
         .select { |path| File.exist?(path) }
