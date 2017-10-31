@@ -23,7 +23,7 @@ task spec: [:paket] do
 
   files = Dir['lib/**/*.ps1'].map { |f| "'#{f}'" }.join(', ')
 
-  command = <<-EOF
+  command = <<-COMMAND
     & {
       Import-Module -Name ./packages/Pester/Pester;
       Invoke-Pester -Path 'spec'
@@ -32,7 +32,7 @@ task spec: [:paket] do
         -OutputFormat NUnitXml
         -CodeCoverage #{files}
     }
-  EOF
+  COMMAND
 
   command = command.each_line.map(&:strip).join(' ')
   pester << command

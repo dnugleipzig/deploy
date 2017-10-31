@@ -11,14 +11,14 @@ task ps_script_analyzer: [:paket] do
   )
 
   %w(lib).each do |path|
-    command = <<-EOF
+    command = <<-COMMAND
       & {
         Import-Module -Name ./packages/PSScriptAnalyzer/PSScriptAnalyzer;
         Invoke-ScriptAnalyzer -Path '#{path}'
           -Recurse
           -Profile ./.PSAnalyzer.ps1
       }
-    EOF
+    COMMAND
 
     command = command.each_line.map(&:strip).join(' ')
 

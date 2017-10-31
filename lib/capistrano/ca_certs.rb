@@ -24,7 +24,7 @@ module CACerts
         FileUtils.cp(file.path, cache)
 
         file.path
-      rescue => e
+      rescue => e # rubocop:disable Lint/RescueWithoutErrorClass
         warn "Failed to download CA certs: #{e}"
         try_cached
       end
