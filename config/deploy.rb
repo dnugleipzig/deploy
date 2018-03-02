@@ -7,9 +7,12 @@ lock '3.10.1'
 
 set :format_options, log_file: 'build/log/capistrano.log'
 
+ssh_key = 'ssh/capistrano'
+File.chmod(0400, ssh_key) # rubocop:disable Style/NumericLiteralPrefix
+
 set :ssh_options,
     user: 'capistrano',
-    keys: %w(ssh/capistrano),
+    keys: [ssh_key],
     auth_methods: %w(publickey)
 
 set :rsh, "ssh -i #{fetch(:ssh_options)[:keys].first} -o PasswordAuthentication=no -o StrictHostKeyChecking=no"
