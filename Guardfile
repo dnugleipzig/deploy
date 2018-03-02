@@ -36,7 +36,7 @@ group :specs, halt_on_fail: true do # rubocop:disable Metrics/BlockLength
       command = <<-COMMAND
         & {
           Import-Module -Name ./packages/Pester/tools/Pester;
-          Invoke-Pester -Path '%s' -EnableExit
+          Invoke-Pester -Path '%<path>s' -EnableExit
         }
       COMMAND
 
@@ -45,7 +45,8 @@ group :specs, halt_on_fail: true do # rubocop:disable Metrics/BlockLength
         .each do |path|
         n path, 'Pester', :pending
 
-        success = RakeFileUtils.sh(*powershell, single_line(command) % path) do |ok, _|
+        success = RakeFileUtils.sh(*powershell,
+                                   format(single_line(command), path: path)) do |ok, _|
           status = ok ? :success : :failed
           n path, 'Pester', status
           ok

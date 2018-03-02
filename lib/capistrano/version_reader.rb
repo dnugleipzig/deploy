@@ -23,7 +23,7 @@ class VersionReader
 
     def read_version_from(file)
       Rake::Funnel::Support::BinaryVersionReader.read_from(file).file_version
-    rescue => e # rubocop:disable Lint/RescueWithoutErrorClass
+    rescue => e # rubocop:disable Style/RescueStandardError
       raise e, "Could not read version from #{file}"
     end
 

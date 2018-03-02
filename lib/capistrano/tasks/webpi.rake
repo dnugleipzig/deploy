@@ -49,3 +49,5 @@ namespace :download do
     end
   end
 end
+
+# rubocop:enable Metrics/BlockLength
