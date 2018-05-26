@@ -4,7 +4,7 @@ require 'capistrano/custom_commands'
 
 describe 'command map' do # rubocop:disable RSpec/DescribeClass
   it 'adds PowerShell command map' do
-    expect(SSHKit.config.command_map[:powershell]).to be
+    expect(SSHKit.config.command_map[:powershell]).to be_truthy
   end
 
   it 'defines PowerShell invocation' do
