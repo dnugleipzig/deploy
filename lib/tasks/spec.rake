@@ -8,7 +8,17 @@ RSpec::Core::RakeTask.new do |t|
   t.rspec_opts += ' --format progress' unless Rake::Funnel::Integration::TeamCity.running?
 end
 
-task spec: [:paket] do
+task :spec do
+  [
+    'build/spec/**/* => spec',
+    'build/coverage/**/* => coverage'
+  ].each do |artifact|
+    Rake::Funnel::Integration::TeamCity::ServiceMessages
+      .publish_artifacts(artifact)
+  end
+end
+
+task spec: [:paket] do # rubocop:disable Metrics/BlockLength
   next unless Rake::Win32.windows?
 
   mkdir_p 'build/spec'
@@ -38,4 +48,8 @@ task spec: [:paket] do
   command = command.each_line.map(&:strip).join(' ')
   pester << command
   sh(*pester)
+
+  Rake::Funnel::Integration::TeamCity::ServiceMessages
+    .import_data(type: :nunit,
+                 path: 'build/spec/pester.xml')
 end
