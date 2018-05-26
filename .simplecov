@@ -15,6 +15,13 @@ SimpleCov.start do
     relative_path.to_s =~ %r{^spec/}
   end
 
+  Dir['lib/*']
+    .select { |e| File.directory?(e) }
+    .reject { |d| d == 'lib/tasks' }
+    .each do |d|
+      add_group File.basename(d), d
+    end
+
   coverage_dir('build/coverage')
 
   format = [::SimpleCov::Formatter::HTMLFormatter]
