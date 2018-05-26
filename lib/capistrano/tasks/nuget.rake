@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :download do
   desc 'Download NuGet'
   task :nuget, [:executable] do |_t, args|

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 task ps_script_analyzer: [:paket] do
   next unless Rake::Win32.windows?
 

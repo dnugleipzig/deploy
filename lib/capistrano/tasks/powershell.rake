@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :copy do
   desc 'Copy PowerShell library to application'
   task powershell: [:paket] do

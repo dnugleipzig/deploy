@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'capistrano/dns'
 require 'capistrano/ca_certs'
 

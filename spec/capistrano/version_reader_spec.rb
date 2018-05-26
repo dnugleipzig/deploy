@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'capistrano/version_reader'
 
 describe VersionReader do

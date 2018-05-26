@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'capistrano/ca_certs'
 require 'open-uri'
 

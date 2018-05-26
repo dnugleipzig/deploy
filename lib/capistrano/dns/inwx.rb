@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'inwx/domrobot'
 require 'capistrano/ca_certs'
 

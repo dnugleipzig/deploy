@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class EnvironmentVariables
   PREFIX = /^DEPLOY_ENV_/
 

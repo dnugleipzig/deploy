@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'capistrano/custom_commands'
 
 describe 'command map' do # rubocop:disable RSpec/DescribeClass
