@@ -109,6 +109,8 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.7.0)
     rspec-support (3.7.1)
+    rspec-teamcity (0.0.1)
+      rspec (>= 2.99, >= 2.14.2, < 4)
     rubocop (0.52.1)
       parallel (~> 1.10)
       parser (>= 2.4.0.2, < 3.0)
@@ -165,7 +167,8 @@ DEPENDENCIES
   rb-fsevent
   rb-inotify
   rspec (~> 3.4)
-  rubocop (~> 0.46)
+  rspec-teamcity
+  rubocop
   rubocop-checkstyle_formatter
   rubocop-rspec
   ruby_gntp
@@ -176,4 +179,4 @@ DEPENDENCIES
   xmlrpc (~> 0.3)
 
 BUNDLED WITH
-   1.16.1
+   1.16.2

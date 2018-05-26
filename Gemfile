@@ -9,22 +9,26 @@ install_if(-> { RUBY_VERSION >= '2.4' }) do
   gem 'xmlrpc', '~> 0.3'
 end
 
-group :development do
-  gem 'awesome_print'
-  gem 'pry-byebug'
-
-  # RuboCop.
-  gem 'rubocop', '~> 0.46'
-  gem 'rubocop-checkstyle_formatter'
-  gem 'rubocop-rspec'
-
-  # RSpec.
+group :test do
   gem 'rspec', '~> 3.4'
+  gem 'rspec-teamcity'
+
   gem 'simplecov', '~> 0.11'
   gem 'simplecov-teamcity-summary', '~> 0.1'
 
   gem 'codeclimate-test-reporter'
   gem 'coveralls'
+end
+
+group :style do
+  gem 'rubocop'
+  gem 'rubocop-checkstyle_formatter'
+  gem 'rubocop-rspec'
+end
+
+group :development do
+  gem 'awesome_print'
+  gem 'pry-byebug'
 
   # guard.
   gem 'guard-bundler'
