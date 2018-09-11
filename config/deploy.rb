@@ -58,6 +58,22 @@ end
 
 before 'deploy:new_release_path', 'copy:powershell'
 
+before 'deploy:symlink:shared', 'symlinks:create' do
+  fetch(:manifest)
+    .fetch('application', {})
+    .fetch('symlinks', {})
+    .each do |pair|
+    source, target = pair.first
+
+    on release_roles(:all) do
+      execute :ln,
+              '-s',
+              File.join(shared_path, source).shellescape,
+              File.join(release_path, target).shellescape
+    end
+  end
+end
+
 before 'deploy:set_current_revision', 'publish:build_number' do
   require 'capistrano/version_reader'
   set :current_revision, VersionReader.read_from(fetch(:manifest))
