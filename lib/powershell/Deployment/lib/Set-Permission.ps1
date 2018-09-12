@@ -10,7 +10,7 @@
     [hashtable] $Permissions
   )
 
-  if (!$(Test-Path -Path $Path -PathType Container))
+  if (!$(Test-Path -Path $Path -PathType Any))
   {
     New-Item -Path $Path -Type Directory | Out-Null
   }
