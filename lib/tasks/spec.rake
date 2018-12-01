@@ -8,6 +8,7 @@ RSpec::Core::RakeTask.new do |t|
   t.rspec_opts += ' --format progress' unless Rake::Funnel::Integration::TeamCity.running?
 end
 
+desc 'Run tests'
 task :spec do
   [
     'build/spec/**/* => spec',
