@@ -22,7 +22,7 @@ module DNS
 
     private
 
-    ENV_TOKEN = %r{^env://}
+    ENV_TOKEN = %r{^env://}.freeze
 
     def with_env_token(value)
       return value unless value =~ ENV_TOKEN
@@ -69,6 +69,7 @@ module DNS
 
     def logout
       return unless @robot
+
       puts 'Logging out'
       robot.logout
     end

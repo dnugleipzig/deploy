@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class EnvironmentVariables
-  PREFIX = /^DEPLOY_ENV_/
+  PREFIX = /^DEPLOY_ENV_/.freeze
 
   class << self
     def extract(where = {})

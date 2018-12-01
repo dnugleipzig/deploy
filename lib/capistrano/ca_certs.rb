@@ -48,6 +48,7 @@ module CACerts
 
     def try_cached
       raise IOError, "CA certs cache file could not be found at #{cache}" unless File.exist?(cache)
+
       cache
     end
   end
