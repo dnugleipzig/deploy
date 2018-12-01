@@ -3,19 +3,23 @@
 require 'rake/funnel'
 require 'rspec/core/rake_task'
 
-RSpec::Core::RakeTask.new do |t|
-  t.rspec_opts = '--order random --format html --out build/spec/rspec.html'
-  t.rspec_opts += ' --format progress' unless Rake::Funnel::Integration::TeamCity.running?
-end
-
 desc 'Run tests'
 task :spec do
-  [
-    'build/spec/**/* => spec',
-    'build/coverage/**/* => coverage'
-  ].each do |artifact|
-    Rake::Funnel::Integration::TeamCity::ServiceMessages
-      .publish_artifacts(artifact)
+  rspec = RSpec::Core::RakeTask.new(:rspec) do |t|
+    t.rspec_opts = '--order random --format html --out build/spec/rspec.html'
+    t.rspec_opts += ' --format progress' unless Rake::Funnel::Integration::TeamCity.running?
+  end
+
+  begin
+    Rake::Task[rspec.name].execute
+  ensure
+    [
+      'build/spec/**/* => spec',
+      'build/coverage/**/* => coverage'
+    ].each do |artifact|
+      Rake::Funnel::Integration::TeamCity::ServiceMessages
+        .publish_artifacts(artifact)
+    end
   end
 end
 
@@ -48,9 +52,12 @@ task spec: [:paket] do # rubocop:disable Metrics/BlockLength
 
   command = command.each_line.map(&:strip).join(' ')
   pester << command
-  sh(*pester)
 
-  Rake::Funnel::Integration::TeamCity::ServiceMessages
-    .import_data(type: :nunit,
-                 path: 'build/spec/pester.xml')
+  begin
+    sh(*pester)
+  ensure
+    Rake::Funnel::Integration::TeamCity::ServiceMessages
+      .import_data(type: :nunit,
+                   path: 'build/spec/pester.xml')
+  end
 end
