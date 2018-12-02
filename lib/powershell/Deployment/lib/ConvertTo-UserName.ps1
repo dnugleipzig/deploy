@@ -16,11 +16,24 @@
   {
     if (!$Identity.StartsWith($SidToken, [System.StringComparison]::OrdinalIgnoreCase))
     {
-      Return $Identity
+      $Account = New-Object System.Security.Principal.NTAccount($Identity)
+      [void] $Account.Translate([System.Security.Principal.SecurityIdentifier])
+    }
+    else
+    {
+      $Identity = $Identity.Substring($SidToken.Length)
+
+      if([System.Enum]::GetValues([System.Security.Principal.WellKnownSidType]) -contains $Identity)
+      {
+        $SID = [System.Security.Principal.WellKnownSidType] $Identity
+        $Account = New-Object System.Security.Principal.SecurityIdentifier($SID, $null)
+      }
+      else
+      {
+        $Account = New-Object System.Security.Principal.SecurityIdentifier($Identity)
+      }
     }
 
-    $SID = [System.Security.Principal.WellKnownSidType] $Identity.Substring($SidToken.Length)
-    $Account = New-Object System.Security.Principal.SecurityIdentifier($SID, $null)
     $Account.Translate([System.Security.Principal.NTAccount]).Value
   }
 }

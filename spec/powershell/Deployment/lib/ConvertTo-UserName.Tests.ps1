@@ -3,7 +3,7 @@ Import-Module -Name $Module
 
 Describe 'ConvertTo-UserName' {
   InModuleScope Deployment {
-    Context 'valid SID' {
+    Context 'valid SID enum value' {
       It 'returns user name' {
         $Name = ConvertTo-UserName -Identity 'sid://BuiltinAdministratorsSid'
 
@@ -17,32 +17,58 @@ Describe 'ConvertTo-UserName' {
       }
     }
 
-    Context 'invalid SID' {
-      It 'fails' {
-        { ConvertTo-UserName -Identity 'sid://NoSid' } | Should Throw 'Cannot convert value'
-      }
-    }
+    Context 'valid SID in SDDL form' {
+      It 'returns user name' {
+        $Name = ConvertTo-UserName -Identity 'sid://S-1-5-6'
 
-    Context 'user name' {
-      It 'returns user name as-is' {
-        $Name = ConvertTo-UserName -Identity 'user'
-
-        $Name | Should Be 'user'
+        $Name | Should Match 'NT AUTHORITY\\'
       }
 
       It 'supports piping' {
-        $Name = 'user' | ConvertTo-UserName
+        $Name = 'sid://S-1-5-6' | ConvertTo-UserName
 
-        $Name | Should Be 'user'
+        $Name | Should Match 'NT AUTHORITY\\'
+      }
+    }
+
+    Context 'invalid SID enum value' {
+      It 'fails' {
+        { ConvertTo-UserName -Identity 'sid://does-not-exist' } | Should Throw 'Value was invalid'
+      }
+    }
+
+    Context 'invalid SID in SDDL form' {
+      It 'fails' {
+        { ConvertTo-UserName -Identity 'sid://S-42-23' } | Should Throw 'Value was invalid'
+      }
+    }
+
+    Context 'valid user name' {
+      It 'returns user name' {
+        $Name = ConvertTo-UserName -Identity 'Administrator'
+
+        $Name | Should Be 'Administrator'
+      }
+
+      It 'supports piping' {
+        $Name = 'Administrator' | ConvertTo-UserName
+
+        $Name | Should Be 'Administrator'
+      }
+    }
+
+    Context 'invalid user name' {
+      It 'fails' {
+        { ConvertTo-UserName -Identity 'does-not-exist' } | Should Throw 'Some or all identity references could not be translated'
       }
     }
 
     Context 'mixed piping' {
       It 'succeeds' {
-        $Names = @('sid://BuiltinAdministratorsSid', 'user') | ConvertTo-UserName
+        $Names = @('sid://BuiltinAdministratorsSid', 'sid://S-1-5-6') | ConvertTo-UserName
 
         $Names[0] | Should Match 'BUILTIN\\'
-        $Names[1] | Should Be 'user'
+        $Names[1] | Should Match 'NT AUTHORITY\\'
       }
     }
   }
