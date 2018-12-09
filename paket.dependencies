@@ -1,7 +1,7 @@
 source https://www.powershellgallery.com/api/v2
-source https://nuget.org/api/v2
+source https://api.nuget.org/v3/index.json
 
-nuget Pester ~> 4.0 prerelease
+nuget Pester ~> 4.0
 nuget PSScriptAnalyzer ~> 1.4
 
 nuget YamlDotNet ~> 4.2
