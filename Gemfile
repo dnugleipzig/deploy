@@ -23,7 +23,7 @@ group :test do
 end
 
 group :style do
-  gem 'rubocop'
+  gem 'rubocop', '!= 0.62'
   gem 'rubocop-checkstyle_formatter'
   gem 'rubocop-rspec'
 end
