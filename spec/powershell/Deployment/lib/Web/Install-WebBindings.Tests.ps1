@@ -171,6 +171,84 @@ Describe 'Install-WebBindings' {
       }
     }
 
+    Context 'HTTPS binding with matching wildcard certificate' {
+      $Bindings = @(
+        @{
+          protocol = 'https'
+          host_header = 'something.example.com'
+          port = 123
+          ip_address = '1.2.3.4'
+        }
+      )
+
+      Mock Get-WebBinding -ParameterFilter { $Name -eq $Site -and $Protocol -eq 'https' } {
+        $GetAttributeValue = { '1.2.3.4:443:something.example.com' }
+        $AddSslCertificate = { param($Hash) $Hash }
+
+        $Binding = New-Object -TypeName PSObject
+
+        Add-Member -InputObject $Binding -MemberType ScriptMethod -Name GetAttributeValue -Value $GetAttributeValue
+        Add-Member -InputObject $Binding -MemberType ScriptMethod -Name AddSslCertificate -Value $AddSslCertificate
+
+        @($Binding)
+      }
+
+      Mock Get-ChildItem -ParameterFilter { $Path -eq 'Cert:\LocalMachine\My' } {
+        $Certificates = @(
+          @{
+            Extensions = @(
+              @{
+                Oid = @{
+                  FriendlyName = 'subject alternative name'
+                }
+              },
+              @{
+                Oid = @{
+                  FriendlyName = 'something'
+                }
+              }
+            )
+          },
+          @{
+            Extensions = @(
+              @{
+                Oid = @{
+                  FriendlyName = 'subject alternative name'
+                }
+              }
+            )
+          }
+        )
+
+        $FormatNoMatch = { 'DNS Name=example.com' }
+        $FormatMatch = { 'DNS Name=*.example.com' }
+        $GetCertHashString = { 'certificate hash string' }
+
+        Add-Member -InputObject $Certificates[0].Extensions[0] -MemberType ScriptMethod -Name Format -Value $FormatNoMatch
+
+        Add-Member -InputObject $Certificates[1].Extensions[0] -MemberType ScriptMethod -Name Format -Value $FormatMatch
+        Add-Member -InputObject $Certificates[1] -MemberType ScriptMethod -Name GetCertHashString -Value $GetCertHashString
+
+        $Certificates
+      }
+
+      $Hash = Install-WebBindings -Site $Site -Bindings $Bindings
+
+      It 'adds binding' {
+        Assert-MockCalled New-WebBinding -ParameterFilter {
+          $Name -eq $Site -and
+          $Protocol -eq $Bindings[0].protocol -and
+          $HostHeader -eq $Bindings[0].host_header -and
+          $Port -eq $Bindings[0].port -and
+          $IpAddress -eq $Bindings[0].ip_address
+        }
+      }
+
+      It 'assigns certificate' {
+        $Hash | Should Be 'certificate hash string'
+      }
+    }
+
     Context 'HTTPS binding without matching certificate' {
       $Bindings = @(
         @{

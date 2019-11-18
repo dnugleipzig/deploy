@@ -41,7 +41,13 @@
       Where-Object {
         $_.Extensions | `
           Where-Object { $_.Oid.FriendlyName -eq 'subject alternative name' } | `
-          Where-Object { $_.Format(1) -match "DNS Name=$HostHeader" }
+          Where-Object {
+            $Format = $_.Format(1)
+            $WildcardHostHeader = $HostHeader -replace '^.+?\.', '*.'
+
+            $Format -match [Regex]::Escape("DNS Name=$HostHeader") -or
+            $Format -match [Regex]::Escape("DNS Name=$WildcardHostHeader")
+          }
       } | `
       Sort-Object -Property NotAfter -Descending | `
       Select-Object -First 1
