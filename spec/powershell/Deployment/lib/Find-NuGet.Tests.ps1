@@ -27,7 +27,7 @@ Describe 'Find-NuGet' {
       }
 
       It 'downloads nuget.exe' {
-        Assert-MockCalled Invoke-WebRequest -ParameterFilter { $Uri -eq 'https://www.nuget.org/nuget.exe' -and $OutFile -eq $Path }
+        Assert-MockCalled Invoke-WebRequest -ParameterFilter { $Uri -eq 'https://dist.nuget.org/win-x86-commandline/latest/nuget.exe' -and $OutFile -eq $Path }
       }
 
       It 'returns path' {

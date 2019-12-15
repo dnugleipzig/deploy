@@ -7,7 +7,7 @@
     [string] $Path = '.\tools\nuget\nuget.exe',
     [Parameter(Position = 1, Mandatory = $false)]
     [ValidateNotNullOrEmpty()]
-    [string] $DownloadFrom = 'https://www.nuget.org/nuget.exe'
+    [string] $DownloadFrom = 'https://dist.nuget.org/win-x86-commandline/latest/nuget.exe'
   )
 
   if(Test-Path $Path)
