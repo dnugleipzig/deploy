@@ -13,6 +13,11 @@
 
   'Testing HTTP responses' | Out-Host
 
+  [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls13 -bor `
+    [System.Net.SecurityProtocolType]::Tls12 -bor `
+    [System.Net.SecurityProtocolType]::Tls11 -bor `
+    [System.Net.SecurityProtocolType]::Tls
+
   $Tests | ForEach-Object {
     $Method = $_.method
     $Url = $_.url
