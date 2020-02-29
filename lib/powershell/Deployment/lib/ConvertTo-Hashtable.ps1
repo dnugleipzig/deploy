@@ -52,7 +52,7 @@
         }
       )
 
-      Write-Output -NoEnumerate $Collection
+      Write-Output $Collection -NoEnumerate
     }
     elseif ($InputObject -is [psobject])
     {

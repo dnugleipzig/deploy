@@ -31,7 +31,7 @@ Describe 'deploy.ps1' {
     It 'sets default ErrorAction' {
       if ($NotAnAdministrator)
       {
-        Set-TestInconclusive -Message 'needs to be run as an Administrator'
+        Set-ItResult -Inconclusive -Because 'needs to be run as an Administrator'
         Return
       }
 
@@ -41,7 +41,7 @@ Describe 'deploy.ps1' {
     It 'imports WebAdministration' {
       if ($NotAnAdministrator)
       {
-        Set-TestInconclusive -Message 'needs to be run as an Administrator'
+        Set-ItResult -Inconclusive -Because 'needs to be run as an Administrator'
         Return
       }
 
@@ -53,7 +53,7 @@ Describe 'deploy.ps1' {
      It 'imports Deployment' {
       if ($NotAnAdministrator)
       {
-        Set-TestInconclusive -Message 'needs to be run as an Administrator'
+        Set-ItResult -Inconclusive -Because 'needs to be run as an Administrator'
         Return
       }
 
@@ -66,7 +66,7 @@ Describe 'deploy.ps1' {
     It 'invokes specified operation' {
       if ($NotAnAdministrator)
       {
-        Set-TestInconclusive -Message 'needs to be run as an Administrator'
+        Set-ItResult -Inconclusive -Because 'needs to be run as an Administrator'
         Return
       }
 
@@ -90,7 +90,7 @@ Describe 'deploy.ps1' {
     It 'invokes deployment as install' {
       if ($NotAnAdministrator)
       {
-        Set-TestInconclusive -Message 'needs to be run as an Administrator'
+        Set-ItResult -Inconclusive -Because 'needs to be run as an Administrator'
         Return
       }
 
@@ -118,7 +118,7 @@ Describe 'deploy.ps1' {
     It 'invokes deployment as install' {
       if ($NotAnAdministrator)
       {
-        Set-TestInconclusive -Message 'needs to be run as an Administrator'
+        Set-ItResult -Inconclusive -Because 'needs to be run as an Administrator'
         Return
       }
 
@@ -146,7 +146,7 @@ Describe 'deploy.ps1' {
     It 'invokes deployment as uninstall' {
       if ($NotAnAdministrator)
       {
-        Set-TestInconclusive -Message 'needs to be run as an Administrator'
+        Set-ItResult -Inconclusive -Because 'needs to be run as an Administrator'
         Return
       }
 

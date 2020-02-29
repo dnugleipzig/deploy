@@ -41,7 +41,7 @@ task spec: [:paket] do # rubocop:disable Metrics/BlockLength
 
   command = <<-COMMAND
     & {
-      Import-Module -Name ./packages/Pester/Pester;
+      Import-Module -Name ./packages/Pester/tools/Pester;
       Invoke-Pester -Path 'spec'
         -EnableExit
         -OutputFile build/spec/pester.xml
