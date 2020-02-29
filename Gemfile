@@ -16,10 +16,7 @@ group :test do
   gem 'rspec-teamcity'
 
   gem 'simplecov', '~> 0.11'
-  gem 'simplecov-teamcity-summary', '~> 0.1'
-
-  gem 'codeclimate-test-reporter'
-  gem 'coveralls'
+  gem 'simplecov-teamcity-summary', '~> 1.0'
 end
 
 group :style do

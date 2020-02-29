@@ -1,6 +1,5 @@
 #!/usr/bin/env ruby
 
-require 'coveralls'
 require 'pathname'
 require 'rake/funnel'
 require 'simplecov-teamcity-summary'
@@ -25,7 +24,6 @@ SimpleCov.start do
   coverage_dir('build/coverage')
 
   format = [::SimpleCov::Formatter::HTMLFormatter]
-  format << Coveralls::SimpleCov::Formatter if Coveralls.will_run?
 
   if Rake::Funnel::Integration::TeamCity.running?
     format << ::SimpleCov::Formatter::TeamcitySummaryFormatter
