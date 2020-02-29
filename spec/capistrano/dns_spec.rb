@@ -57,13 +57,17 @@ describe DNS do
         }
       end
 
-      class AnotherProvider
-        def initialize(config); end
+      let(:another_provider) do
+        Class.new do
+          def initialize(config); end
 
-        def run; end
+          def run; end
+        end
       end
 
       before do
+        stub_const('AnotherProvider', another_provider)
+
         allow(described_class).to receive(:download_cacerts)
         allow(DNS::Inwx).to receive(:new).and_return(double(DNS::Inwx).as_null_object)
         allow(AnotherProvider).to receive(:new).and_return(double(AnotherProvider).as_null_object)
