@@ -13,7 +13,7 @@ namespace :download do
               File.dirname(nuget).shellescape
 
       execute :wget,
-              'https://www.nuget.org/nuget.exe',
+              'https://dist.nuget.org/win-x86-commandline/latest/nuget.exe',
               '--no-verbose',
               '--output-document',
               nuget.shellescape
