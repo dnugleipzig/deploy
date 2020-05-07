@@ -26,6 +26,9 @@
 
   Install-WebBindings -Site $Site.Name -Bindings $Config.bindings
 
+  Start-WebCommitDelay
+  Stop-WebCommitDelay -Commit $true
+
   Start-Website -Name $Site.Name
 
   Test-HttpResponse -Tests $Config.tests
